@@ -58,11 +58,13 @@ const _byCategory = $derived.by<CategoryGroup[]>(() => {
 
 export function getByCategory() { return _byCategory; }
 
+import { base } from '$app/paths';
+
 export async function loadWallpapers(): Promise<void> {
 	_loading = true;
 	_error = null;
 	try {
-		const resp = await fetch('/wallpapers/all.json');
+		const resp = await fetch(`${base}/wallpapers/all.json`);
 		if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 		const data: ApiResponse = await resp.json();
 		if (data.code !== 0) throw new Error(`API error code ${data.code}`);
