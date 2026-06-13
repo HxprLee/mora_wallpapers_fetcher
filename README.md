@@ -1,6 +1,6 @@
 # Mora Wallpapers Fetcher
 
-A Simple static site that fetches static/animated wallpapers to download from the Redmagic Mora CN app made with SvelteKit. Deployed with GitHub Pages.
+A Simple static site that fetches static/animated wallpapers to download from the Redmagic Mora CN app made with SvelteKit, deployed with GitHub Pages. There's also a bash script to download all the wallpapers from the endpoint that you can download and use locally.
 
 ## Development
 
