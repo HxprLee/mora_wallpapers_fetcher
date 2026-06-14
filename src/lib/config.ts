@@ -1,4 +1,4 @@
-export const WORKER_URL = 'https://YOUR-WORKER.workers.dev';
+export const WORKER_URL = 'https://redmagic-proxy.hxprlee.workers.dev';
 
 export const CATEGORIES = [
 	{ id: 1, label: 'Static Wallpapers', slug: 'static', icon: '🖼️' },
