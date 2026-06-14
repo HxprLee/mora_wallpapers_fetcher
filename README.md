@@ -2,20 +2,6 @@
 
 A Simple static site that fetches static/animated wallpapers to download from the Redmagic Mora CN app made with SvelteKit, deployed with GitHub Pages. There's also a bash script to download all the wallpapers from the endpoint that you can download and use locally.
 
-## Development
-
-```sh
-npm install
-npm run dev
-```
-
-Create a production build:
-
-```sh
-npm run build
-npm run preview
-```
-
 ## Deployment
 
 The GitHub Action (`.github/workflows/fetch-wallpapers.yml`) runs daily and on push to `main`:
