@@ -1,13 +1,23 @@
 import { base } from "$app/paths";
 import type { WallpaperItem } from "$lib/stores/wallpapers";
 
-export function downloadSingle(item: WallpaperItem): void {
-  const link = document.createElement("a");
-  link.href = `${base}/download-proxy?url=${encodeURIComponent(item.file_url)}`;
-  link.download = `${item.title}${getExtension(item.file_url)}`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+export async function downloadSingle(item: WallpaperItem): Promise<void> {
+  const filename = `${item.title}${getExtension(item.file_url)}`;
+
+  try {
+    const resp = await fetch(`${base}/download-proxy?url=${encodeURIComponent(item.file_url)}`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const blob = await resp.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  } catch {
+    window.open(item.file_url, "_blank");
+  }
 }
 
 export function openInNewTab(item: WallpaperItem): void {
