@@ -1,13 +1,10 @@
 /// <reference types="@sveltejs/kit" />
 
-const CACHE_NAME = 'download-cache';
-
 self.addEventListener('install', () => {
 	self.skipWaiting();
 });
 
-self.addEventListener('activate', (event: ExtendableEvent) => {
-	event.waitUntil(caches.delete(CACHE_NAME));
+self.addEventListener('activate', () => {
 	self.clients.claim();
 });
 
@@ -21,33 +18,17 @@ self.addEventListener('fetch', (event: FetchEvent) => {
 });
 
 async function proxyDownload(targetUrl: string): Promise<Response> {
-	const cache = await caches.open(CACHE_NAME);
-
-	let cached = await cache.match(targetUrl);
-	if (!cached) {
-		const opaque = await fetch(targetUrl, { mode: 'no-cors' });
-		await cache.put(targetUrl, opaque);
-		cached = await cache.match(targetUrl);
-	}
-
-	if (cached) {
-		try {
-			const blob = await cached.blob();
-			return new Response(blob, {
-				status: 200,
-				statusText: 'OK',
-				headers: {
-					'Content-Type': getContentType(targetUrl),
-					'Access-Control-Allow-Origin': '*'
-				}
-			});
-		} catch {
-			// opaque body not readable — fall through
+	const opaque = await fetch(targetUrl, { mode: 'no-cors' });
+	const { readable, writable } = new TransformStream();
+	opaque.body!.pipeTo(writable).catch(() => {});
+	return new Response(readable, {
+		status: 200,
+		statusText: 'OK',
+		headers: {
+			'Content-Type': getContentType(targetUrl),
+			'Access-Control-Allow-Origin': '*'
 		}
-	}
-
-	// Pass opaque response through as last resort
-	return fetch(targetUrl, { mode: 'no-cors' });
+	});
 }
 
 function getContentType(url: string): string {
