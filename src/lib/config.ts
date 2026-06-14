@@ -1,4 +1,4 @@
-export const CORS_PROXY = 'https://corsproxy.io/?';
+export const WORKER_URL = 'https://YOUR-WORKER.workers.dev';
 
 export const CATEGORIES = [
 	{ id: 1, label: 'Static Wallpapers', slug: 'static', icon: '🖼️' },
@@ -6,5 +6,5 @@ export const CATEGORIES = [
 ] as const;
 
 export function proxyUrl(url: string): string {
-	return `${CORS_PROXY}${encodeURIComponent(url)}`;
+	return `${WORKER_URL}/?url=${encodeURIComponent(url)}`;
 }

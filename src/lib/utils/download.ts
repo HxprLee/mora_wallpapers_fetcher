@@ -1,11 +1,11 @@
-import { base } from "$app/paths";
+import { proxyUrl } from "$lib/config";
 import type { WallpaperItem } from "$lib/stores/wallpapers";
 
 export async function downloadSingle(item: WallpaperItem): Promise<void> {
   const filename = `${item.title}${getExtension(item.file_url)}`;
 
   try {
-    const resp = await fetch(`${base}/download-proxy?url=${encodeURIComponent(item.file_url)}`);
+    const resp = await fetch(proxyUrl(item.file_url));
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const blob = await resp.blob();
     const link = document.createElement("a");
