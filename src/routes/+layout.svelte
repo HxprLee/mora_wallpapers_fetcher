@@ -1,5 +1,12 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	let { children } = $props();
+
+	$effect(() => {
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register(`${base}/service-worker.js`);
+		}
+	});
 </script>
 
 <svelte:head>

@@ -1,15 +1,9 @@
-import { CORS_PROXY } from "$lib/config";
+import { base } from "$app/paths";
 import type { WallpaperItem } from "$lib/stores/wallpapers";
-
-function proxyUrl(url: string): string {
-  return `${CORS_PROXY}${encodeURIComponent(url)}`;
-}
 
 export function downloadSingle(item: WallpaperItem): void {
   const link = document.createElement("a");
-  link.href = item.file_url;
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
+  link.href = `${base}/download-proxy?url=${encodeURIComponent(item.file_url)}`;
   link.download = `${item.title}${getExtension(item.file_url)}`;
   document.body.appendChild(link);
   link.click();
