@@ -5,20 +5,15 @@ function proxyUrl(url: string): string {
   return `${CORS_PROXY}${encodeURIComponent(url)}`;
 }
 
-export async function downloadSingle(item: WallpaperItem): Promise<void> {
-  try {
-    const resp = await fetch(proxyUrl(item.file_url));
-    const blob = await resp.blob();
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `${item.title}${getExtension(item.file_url)}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  } catch {
-    window.open(item.file_url, "_blank");
-  }
+export function downloadSingle(item: WallpaperItem): void {
+  const link = document.createElement("a");
+  link.href = item.file_url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.download = `${item.title}${getExtension(item.file_url)}`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 export function openInNewTab(item: WallpaperItem): void {
